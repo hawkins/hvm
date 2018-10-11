@@ -19,16 +19,17 @@
 // TODO: How can I utilize 0,1,2,3,4?
 typedef enum { PUSH, POP, ADD, SET, HALT } InstructionSet;
 
-typedef enum { A, B, C, D, E, F, NUM_OF_REGISTERS } Registers;
+typedef enum { A, B, C, D, E, F, SP, IP, NUM_OF_REGISTERS } Registers;
 int registers[NUM_OF_REGISTERS];
+
+#define stack_pointer (registers[SP])
+#define instruction_pointer (registers[IP])
 
 // TODO: Example program, hardcoded for now
 const int program[] = {PUSH, 5,  PUSH, 6,   ADD, PUSH, 7,
                        PUSH, 14, ADD,  ADD, POP, HALT};
 
 // Global state
-int instruction_pointer = -1;
-int stack_pointer = 0;
 int stack[256];
 
 int fetch() { return program[++instruction_pointer]; }
@@ -69,6 +70,7 @@ void eval(int instr) {
 }
 
 int main() {
+  instruction_pointer = -1;
   while (running) {
     int instruction = fetch();
     eval(instruction);
